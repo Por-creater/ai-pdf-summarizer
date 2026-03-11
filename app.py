@@ -36,7 +36,7 @@ if uploaded_file:
 
                 try:
 
-                    model = genai.GenerativeModel("gemini-1.5-flash-latest")
+                    model = genai.GenerativeModel("gemini-2.5-flash-latest")
 
                     response = model.generate_content(
                         f"Summarize this document in bullet points:\n{text}"
