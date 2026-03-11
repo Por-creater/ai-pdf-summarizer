@@ -2,7 +2,7 @@ import streamlit as st
 import pdfplumber
 import google.generativeai as genai
 
-genai.configure(api_key="YOUR_API_KEY")
+genai.configure(api_key="AIzaSyCWJ4EfPOYhFdHRrrEx7RHeSq51y8lUzHc")
 
 st.title("AI PDF Summarizer")
 
