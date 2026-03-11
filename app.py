@@ -18,7 +18,7 @@ if uploaded_file:
                 text += page_text
 
     if st.button("Summarize"):
-        model = genai.GenerativeModel("gemini-pro")
+        model = genai.GenerativeModel("gemini-1.5-flash")
         response = model.generate_content(f"Summarize this text:\n{text}")
 
         st.subheader("Summary")
