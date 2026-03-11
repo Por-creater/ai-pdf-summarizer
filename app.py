@@ -2,14 +2,21 @@ import streamlit as st
 import pdfplumber
 import google.generativeai as genai
 
-genai.configure(api_key=st.secrets["GAIzaSyCWJ4EfPOYhFdHRrrEx7RHeSq51y8lUzHc"])
+# ====== ตั้งค่า API KEY ======
+# สำหรับทดสอบสามารถใส่ตรงนี้ได้ก่อน
+genai.configure(api_key="YOUR_API_KEY")
 
-st.title("AI PDF Summarizer")
+# ====== UI ======
+st.title("📄 AI PDF Summarizer")
+st.write("Upload a PDF and let AI summarize it.")
 
 uploaded_file = st.file_uploader("Upload PDF", type="pdf")
 
-if uploaded_file:
+if uploaded_file is not None:
 
+    st.success("PDF uploaded successfully!")
+
+    # ====== อ่าน PDF ======
     text = ""
 
     with pdfplumber.open(uploaded_file) as pdf:
@@ -18,15 +25,26 @@ if uploaded_file:
             if page_text:
                 text += page_text
 
+    # จำกัดขนาดข้อความ
     text = text[:12000]
 
-    if st.button("Summarize"):
+    st.info("PDF text extracted")
 
-        model = genai.GenerativeModel("gemini-1.5-flash-latest")
+    if st.button("Generate Summary"):
 
-        response = model.generate_content(
-            f"Summarize this document:\n{text}"
-        )
+        with st.spinner("AI is summarizing..."):
 
-        st.subheader("Summary")
-        st.write(response.text)
+            try:
+                model = genai.GenerativeModel("gemini-1.5-flash")
+
+                response = model.generate_content(
+                    f"Summarize this document in bullet points:\n{text}"
+                )
+
+                st.subheader("📌 Summary")
+
+                st.write(response.text)
+
+            except Exception as e:
+                st.error("Error occurred")
+                st.write(e)
