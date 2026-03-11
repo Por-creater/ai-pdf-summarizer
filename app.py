@@ -1,39 +1,25 @@
-from flask import Flask, render_template, request
+import streamlit as st
 import pdfplumber
 import google.generativeai as genai
 
-genai.configure(api_key="AIzaSyCWJ4EfPOYhFdHRrrEx7RHeSq51y8lUzHc")
+genai.configure(api_key="YOUR_API_KEY")
 
-model = genai.GenerativeModel("gemini-pro")
+st.title("AI PDF Summarizer")
 
-app = Flask(__name__)
+uploaded_file = st.file_uploader("Upload PDF", type="pdf")
 
-def extract_text(pdf):
+if uploaded_file:
     text = ""
-    with pdfplumber.open(pdf) as pdf_file:
-        for page in pdf_file.pages:
-            text += page.extract_text()
-    return text
 
-def summarize(text):
-    prompt = f"Summarize this document in bullet points:\n{text}"
-    response = model.generate_content(prompt)
-    return response.text
+    with pdfplumber.open(uploaded_file) as pdf:
+        for page in pdf.pages:
+            page_text = page.extract_text()
+            if page_text:
+                text += page_text
 
-@app.route("/", methods=["GET","POST"])
-def index():
+    if st.button("Summarize"):
+        model = genai.GenerativeModel("gemini-pro")
+        response = model.generate_content(f"Summarize this text:\n{text}")
 
-    summary = ""
-
-    if request.method == "POST":
-
-        file = request.files["pdf"]
-
-        text = extract_text(file)
-
-        summary = summarize(text)
-
-    return render_template("index.html", summary=summary)
-
-if __name__ == "__main__":
-    app.run(debug=True)
+        st.subheader("Summary")
+        st.write(response.text)
