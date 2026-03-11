@@ -9,7 +9,7 @@ st.title("AI PDF Summarizer")
 uploaded_file = st.file_uploader("Upload PDF", type="pdf")
 
 if uploaded_file:
-    text = ""
+    text = text[:12000]
 
     with pdfplumber.open(uploaded_file) as pdf:
         for page in pdf.pages:
