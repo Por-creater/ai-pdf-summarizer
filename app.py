@@ -4,7 +4,7 @@ import google.generativeai as genai
 
 # ====== ตั้งค่า API KEY ======
 # สำหรับทดสอบสามารถใส่ตรงนี้ได้ก่อน
-genai.configure(api_key="YOUR_API_KEY")
+genai.configure(api_key=AIzaSyCWJ4EfPOYhFdHRrrEx7RHeSq51y8lUzHc")
 
 # ====== UI ======
 st.title("📄 AI PDF Summarizer")
